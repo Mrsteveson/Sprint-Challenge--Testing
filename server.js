@@ -27,6 +27,23 @@ server.get('/games', (req, res) => {
     })
 });
 
+//Get game by id.
+server.get('/games/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.findById(id)
+    .then(game => {
+        if(game) {
+            res.status(200).json(game)
+        } else {
+            res.status(404).json({ message: 'The specified project does not exist.'})
+        }
+    })
+    .catch(err => {
+        res.status(500).json(err.message)
+    });
+});
+
 //Add a Game.
 server.post('/games', (req, res) => {
     const newGame = req.body;

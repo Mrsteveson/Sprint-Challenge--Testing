@@ -64,6 +64,24 @@ describe('The Endpoints', () => {
         .expect('Content-Type', /application/ || /json/)
     });
 
+    //Get:ID Endpoint
+    it('GET/games:id should return code:200', async () => {
+        await request(server).post('/games')
+        .send({ title: 'Nioh', genre: 'RPG', release: '2017' })
+
+        const expected = await request(server).get('/games/1');
+        expect(expected.status).toBe(200);
+    })
+
+    it('GET/games:id should return code:404', async () => {
+        await request(server).post('/games')
+        .send({ title: 'Nioh', genre: 'RPG', release: '2017' })
+
+        const expected = await request(server).get('/games/2');
+        expect(expected.status).toBe(404);
+    })
+
+
     //POST Endpoint
     it('POST/games should return code:201', () => {
         return request(server)
