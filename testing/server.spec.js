@@ -1,6 +1,7 @@
 const request = require('supertest');
 const server = require('../server.js');
 const db = require('../data/dbConfig.js');
+const games = require('../server-model.js');
 
 describe('The Server', () => {
 
@@ -23,7 +24,7 @@ describe('The Server', () => {
 describe('The Endpoints', () => {
 
     //use beforeAll to run once. beforeEach to run always.
-    beforeAll(async () => {
+    beforeEach(async () => {
         await db('games').truncate();
     });
 
@@ -71,6 +72,24 @@ describe('The Endpoints', () => {
         .then(res => {
             expect(res.status).toBe(201);
         });
+    });
+
+    //isnt working
+    it('POST/games should return an array with length of 1', async () => {
+        
+        // return request(server)
+        // .post('/games')
+        // .send({ title: 'Nioh', genre: 'RPG' })
+        // .then(res => {
+        //     expect(res.status).toBe(201);
+        //     expect(res.body).toHaveLength([1])
+        // })
+
+        await games.add({ title: 'Nioh', genre: 'RPG' })
+
+        const newGame = await db('games');
+        expect(newGame).toHaveLength(1)
+
     });
 
     it('POST/games should return code:422 if entry is incomplete', () => {
